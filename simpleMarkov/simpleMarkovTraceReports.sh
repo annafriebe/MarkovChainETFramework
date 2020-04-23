@@ -1,0 +1,22 @@
+mkdir reports
+trace-cmd report -t traces/traceTrain.dat > reports/simpleMarkovTrainReport
+trace-cmd report -t traces/trace1.dat > reports/simpleMarkovTestReport1
+trace-cmd report -t traces/trace2.dat > reports/simpleMarkovTestReport2
+trace-cmd report -t traces/trace3.dat > reports/simpleMarkovTestReport3
+trace-cmd report -t traces/trace4.dat > reports/simpleMarkovTestReport4
+trace-cmd report -t traces/trace5.dat > reports/simpleMarkovTestReport5
+trace-cmd report -t traces/trace6.dat > reports/simpleMarkovTestReport6
+trace-cmd report -t traces/trace7.dat > reports/simpleMarkovTestReport7
+trace-cmd report -t traces/trace8.dat > reports/simpleMarkovTestReport8
+trace-cmd report -t traces/trace9.dat > reports/simpleMarkovTestReport9
+trace-cmd report -t traces/trace10.dat > reports/simpleMarkovTestReport10
+trace-cmd report -t traces/trace11.dat > reports/simpleMarkovTestReport11
+trace-cmd report -t traces/trace12.dat > reports/simpleMarkovTestReport12
+trace-cmd report -t traces/trace13.dat > reports/simpleMarkovTestReport13
+trace-cmd report -t traces/trace14.dat > reports/simpleMarkovTestReport14
+trace-cmd report -t traces/trace15.dat > reports/simpleMarkovTestReport15
+trace-cmd report -t traces/trace16.dat > reports/simpleMarkovTestReport16
+trace-cmd report -t traces/trace17.dat > reports/simpleMarkovTestReport17
+trace-cmd report -t traces/trace18.dat > reports/simpleMarkovTestReport18
+trace-cmd report -t traces/trace19.dat > reports/simpleMarkovTestReport19
+trace-cmd report -t traces/trace20.dat > reports/simpleMarkovTestReport20
