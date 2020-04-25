@@ -4,9 +4,9 @@ library(depmixS4)
 library(ggplot2)
 library(data.tree)
 
-EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNStates, startStdDev, nPartitions){
+EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNStates, nPartitions){
   print(index)
-  likelihoodsAndTree  <- lib$evalLikelihood$CrossValidationLikelihoodsAndClusteredTree(dataFrame, maxNStates, startStdDev, nPartitions)
+  likelihoodsAndTree  <- lib$evalLikelihood$CrossValidationLikelihoodsAndClusteredTree(dataFrame, maxNStates, nPartitions)
   likelihoodsNCluster <- likelihoodsAndTree[[1]]
   plot(1:length(likelihoodsNCluster), likelihoodsNCluster)
   tree <- likelihoodsAndTree[[2]]
@@ -127,7 +127,6 @@ for(i in seq(1:20)){
 indices <- seq(1, 10)
 nPartitions <- 4
 maxNStates <- 8
-startStdDev <- 1000
 MP <- 100
 M <- 100
 nTest <- 1
@@ -135,7 +134,7 @@ outputDir <- "output/simpleMarkovTest/"
 
 
 set.seed(13)
-pfauList = lapply(indices, try(EstimateValidateModel), dataFrame1, dataFrameTestList, outputDir, maxNStates, startStdDev, nPartitions)
+pfauList = lapply(indices, try(EstimateValidateModel), dataFrame1, dataFrameTestList, outputDir, maxNStates, nPartitions)
 print(pfauList)
 
 

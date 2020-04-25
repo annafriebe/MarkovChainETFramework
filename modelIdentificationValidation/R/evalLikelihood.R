@@ -1,5 +1,5 @@
 
-EstimateCalcSufficientStatistics <- function(dataFrame, nStates, nPartitions, partitionsStop, startStdDev){
+EstimateCalcSufficientStatistics <- function(dataFrame, nStates, nPartitions, partitionsStop){
   chainLength <- length(dataFrame$outputs)
   rowStop = partitionsStop
   as.integer(seq(1:nPartitions)*chainLength/nPartitions)
@@ -12,29 +12,13 @@ EstimateCalcSufficientStatistics <- function(dataFrame, nStates, nPartitions, pa
   
   
   clusters <- stats::kmeans(dataFrame$outputs, nStates)
-#  centers <- sort(clusters$centers)
   centers <- clusters$centers
   startStdDevs <- sqrt(clusters$withinss/clusters$size)
-#  print(centers)
-  initTransitionRow <- clusters$size/chainLength
-  initTransitionMatrix <- t(matrix(rep(initTransitionRow, nStates), nrow=nStates, ncol=nStates))
-#  print(initTransitionMatrix)
-#  print(centers)
-#  print(startStdDevs)
-  
-#  startMeanIndices <- sample(1:chainLength, nStates)
-#  startMeans <- dataFrame$outputs[startMeanIndices]
-#  startMeans <- sort(startMeans)
-#  startStdDevs <- stats::rnorm(nStates, startStdDev, startStdDev)
-#  print(startMeans)
-  
+
   respStartParams <- vector()
   for(i in 1:nStates){
-#    respStartParams <- c(respStartParams, startMeans[i], startStdDev)
     respStartParams <- c(respStartParams, centers[i], startStdDevs[i])
   }
-#  print(respStartParams)
-  
   for (i in 1:nPartitions){
     rows <- vector()
     nTimes <- vector()
@@ -46,9 +30,6 @@ EstimateCalcSufficientStatistics <- function(dataFrame, nStates, nPartitions, pa
     }
     df <- dataFrame[rows,]
     #fit the model for nPartitions -1 partitions
-#
-#    mod <- depmixS4::depmix(outputs ~ 1, data = df, nstates=nStates, family = stats::gaussian(), ntimes=nTimes) # use gaussian() for normally distributed data
-#    mod <- depmixS4::depmix(outputs ~ 1, data = df, nstates=nStates, family = stats::gaussian(), ntimes=nTimes, respstart = respStartParams, trstart=initTransitionMatrix) # use gaussian() for normally distributed data
     mod <- depmixS4::depmix(outputs ~ 1, data = df, nstates=nStates, family = stats::gaussian(), ntimes=nTimes, respstart = respStartParams) # use gaussian() for normally distributed data
     fittedmod<-mod
     fittedmod <- depmixS4::fit(mod)
@@ -261,7 +242,7 @@ CalcSplitAdvantage <- function(sufficientStatistics, node, nPartitions){
 }
 
 export("CrossValidationLikelihoodsAndClusteredTree")
-CrossValidationLikelihoodsAndClusteredTree <- function(dataFrame, nStates, startStdDev = 1000, nPartitions=4, partitionsStop = integer()){
+CrossValidationLikelihoodsAndClusteredTree <- function(dataFrame, nStates, nPartitions=4, partitionsStop = integer()){
   if(length(partitionsStop) == 0){
     chainLength <- length(dataFrame$outputs)
     partitionsStop <- as.integer(seq(1:nPartitions)*chainLength/nPartitions)
@@ -269,11 +250,8 @@ CrossValidationLikelihoodsAndClusteredTree <- function(dataFrame, nStates, start
   tree <- data.tree::Node$new(name="test", states=seq(1,nStates))
   likelihoodsNCluster <- numeric(nStates)
   try({
-    sufficientStats <- EstimateCalcSufficientStatistics(dataFrame, nStates, nPartitions, partitionsStop, startStdDev)
- #   print(sufficientStats)
-#    print("calc likelihood tree")
+    sufficientStats <- EstimateCalcSufficientStatistics(dataFrame, nStates, nPartitions, partitionsStop)
     likelihood <- CalcLikelihoodTree(sufficientStats, tree, nPartitions)
-#    print("calc likelihood tree done")
     # calculate the advantage of splitting each leaf
     tree$Do(function(node) node$advantage <- CalcSplitAdvantage(sufficientStats, node, nPartitions), filterFun = data.tree::isLeaf)
     tree$Do(function(node) node$advantage <- data.tree::Aggregate(node, attribute = "advantage", aggFun = max), traversal = "post-order")
@@ -281,9 +259,7 @@ CrossValidationLikelihoodsAndClusteredTree <- function(dataFrame, nStates, start
     nClusters <- 1
     while ((tree$advantage > 0) && (tree$leafCount < nStates)){
       tree$Do(function(node) SplitNodeIfAdvantage(sufficientStats, node, nPartitions), filterFun = data.tree::isLeaf)
-#      print("calc likelihood tree")
       likelihood <- CalcLikelihoodTree(sufficientStats, tree, nPartitions)
-#      print("calc likelihood tree done")
       likelihoodsNCluster[(nClusters+1):tree$leafCount] <- likelihood
       nClusters <- tree$leafCount
       tree$Do(function(node) node$advantage <- CalcSplitAdvantage(sufficientStats, node, nPartitions), filterFun = data.tree::isLeaf)

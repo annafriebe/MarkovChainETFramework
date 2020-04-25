@@ -4,8 +4,8 @@ library(depmixS4)
 library(ggplot2)
 library(data.tree)
 
-EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNStates, startStdDev, nPartitions){
-  likelihoodsAndTree  <- lib$evalLikelihood$CrossValidationLikelihoodsAndClusteredTree(dataFrame, maxNStates, startStdDev, nPartitions)
+EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNStates, nPartitions){
+  likelihoodsAndTree  <- lib$evalLikelihood$CrossValidationLikelihoodsAndClusteredTree(dataFrame, maxNStates, nPartitions)
   likelihoodsNCluster <- likelihoodsAndTree[[1]]
   plot(1:length(likelihoodsNCluster), likelihoodsNCluster)
   tree <- likelihoodsAndTree[[2]]
@@ -118,7 +118,6 @@ dataFrame2 <- lib$importData$AdaptDataFrame(dataFrame2, 1, TRUE)
 indices <- seq(1, 5)
 nPartitions <- 4
 maxNStates <- 25
-startStdDev <- 1000
 MP <- 100
 M <- 100
 nTest <- 1
@@ -126,9 +125,9 @@ outputDir1 <- "output/videoDecompressionMS3_other/"
 outputDir2 <- "output/videoDecompressionMS3/"
 
 set.seed(13)
-pfauList = lapply(indices, try(EstimateValidateModel), dataFrame1, list(dataFrame2), outputDir1, maxNStates, startStdDev, nPartitions)
+pfauList = lapply(indices, try(EstimateValidateModel), dataFrame1, list(dataFrame2), outputDir1, maxNStates, nPartitions)
 
-pfauList = lapply(indices, try(EstimateValidateModel), dataFrame2, list(dataFrame1), outputDir2, maxNStates, startStdDev, nPartitions)
+pfauList = lapply(indices, try(EstimateValidateModel), dataFrame2, list(dataFrame1), outputDir2, maxNStates, nPartitions)
 print(pfauList[[1]][[2]])
 
 
