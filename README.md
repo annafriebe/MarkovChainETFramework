@@ -18,3 +18,8 @@ The exportTimingData folder contains python scripts for converting the report fi
 
 The files in the modelIdentificationValidation/input folder are pregenerated, so the tests in modelIdentificationValidation can be run directly, without the steps of generating the reports from the trace files and generating the .csv files from the reports.
 
+Tests have been made on RStudio with 
+- R version 3.6.1
+- depmixS4 version 1.4.0
+- data.tree version 0.7.11
+- ggplot2 version 3.2.1
