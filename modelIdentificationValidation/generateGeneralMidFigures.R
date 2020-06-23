@@ -23,15 +23,8 @@ ggplot(dataFrame, aes(x=index, y=executionTime)) +
     axis.line = element_line(colour = "grey")
   )
 
-  #scale_y_continuous(trans='log2', limits = c(50000,30000000)) #+ ylim(50000, 30000000)
 ggsave("output/VideoExecutionTimeTestSeqLog.png")
 ggsave("output/VideoExecutionTimeTestSeqLog.eps")
-
-ggplot(dataFrame, aes(x=executionTime)) +
-  geom_histogram(binwidth = 1000) +
-  xlim(0, 1000000) + theme(text = element_text(size = fontSize))
-ggsave("output/VideoTestHist1000000.png")
-ggsave("output/VideoTestHist1000000.eps")
 
 
 
