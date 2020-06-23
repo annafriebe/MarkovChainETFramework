@@ -33,7 +33,7 @@ EstimateValidateModel <- function(index, dataFrame, dfTest, outputDir, maxNState
     normalParams[r, 2] <- fittedMod@response[[r]][[1]]@parameters$sd
   }
   filename <- paste(outputDir, "normalParams", index, ".txt", sep="")
-  write.table(normalParams, file=filename, row.names=FALSE, col.names=FALSE)
+  write.table(t(normalParams), file=filename, row.names=FALSE, col.names=FALSE, sep=" & ")
   # get the stationary distribution
   # Get the eigenvectors of P, note: R returns right eigenvectors
   r=eigen(transitionMatrix)
@@ -74,15 +74,6 @@ EstimateValidateModel <- function(index, dataFrame, dfTest, outputDir, maxNState
     tmp <- (zSim2[[i]] - Ez[[i]])^2/Vz[[i]]
     TSim[[i]] <- apply(tmp, 2, mean)
   }
-  zObs <- lib$dataConsistencyModelValidation$logLikelihoodStatesTraj(dfsim, fittedMod, transitionMatrix, normalParams)
-  TObs <- list()
-  for (i in 1:(nStates+1)){
-    TObs[[i]] <- mean((zObs[,i] - Ez[[i]])^2/Vz[[i]])
-  }
-  betaSim <- numeric(nStates + 1)
-  for (j in 1:(nStates+1)){
-    betaSim[j] = length(which(TSim[[j]] > TObs[[j]]))/ M
-  }
 
   zObs <- lib$dataConsistencyModelValidation$logLikelihoodStatesTraj(dfTest, fittedMod, transitionMatrix, normalParams)
   TObs <- list()
@@ -93,6 +84,9 @@ EstimateValidateModel <- function(index, dataFrame, dfTest, outputDir, maxNState
   for (j in 1:(nStates+1)){
     betaModel[j] = length(which(TSim[[j]] > TObs[[j]]))/ M
   }
+  filename <- paste(outputDir, "PFAuTable", index, ".txt", sep = "")
+  write.table(betaModel, file=filename, row.names=FALSE, col.names=FALSE, eol=" & ")
+  
   return(betaModel)
 }
 

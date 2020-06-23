@@ -4,11 +4,13 @@ library(depmixS4)
 library(ggplot2)
 library(data.tree)
 
-EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNStates, nPartitions){
+EstimateValidateModel <- function(index, dataFrame, dfTest, outputDir, maxNStates, nPartitions){
   likelihoodsAndTree  <- lib$evalLikelihood$CrossValidationLikelihoodsAndClusteredTree(dataFrame, maxNStates, nPartitions)
   likelihoodsNCluster <- likelihoodsAndTree[[1]]
+  print(likelihoodsNCluster)
   plot(1:length(likelihoodsNCluster), likelihoodsNCluster)
   tree <- likelihoodsAndTree[[2]]
+  print(likelihoodsNCluster)
   if(likelihoodsNCluster[1] == 0){
     return(list())
   }
@@ -31,7 +33,7 @@ EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNS
     normalParams[r, 2] <- fittedMod@response[[r]][[1]]@parameters$sd
   }
   filename <- paste(outputDir, "normalParams", index, ".txt", sep="")
-  write.table(normalParams, file=filename, row.names=FALSE, col.names=FALSE)
+  write.table(t(normalParams), file=filename, row.names=FALSE, col.names=FALSE, sep=" & ")
   # get the stationary distribution
   # Get the eigenvectors of P, note: R returns right eigenvectors
   r=eigen(transitionMatrix)
@@ -54,7 +56,7 @@ EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNS
   filename <- paste(outputDir, "simExecutionTimeSeq", index, ".png", sep = "")
   ggsave(filename)
   p <- ggplot(dfsim, aes(x=outputs)) +
-    geom_histogram(binwidth = 10000) 
+    geom_histogram(binwidth = 100) 
   print(p)
   filename <- paste(outputDir, "simExecutionTimeHist", index, ".eps", sep = "")
   ggsave(filename)
@@ -72,62 +74,33 @@ EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNS
     tmp <- (zSim2[[i]] - Ez[[i]])^2/Vz[[i]]
     TSim[[i]] <- apply(tmp, 2, mean)
   }
-  zObs <- lib$dataConsistencyModelValidation$logLikelihoodStatesTraj(dfsim, fittedMod, transitionMatrix, normalParams)
-  TObs <- list()
-  for (i in 1:(nStates+1)){
-    TObs[[i]] <- mean((zObs[,i] - Ez[[i]])^2/Vz[[i]])
-  }
-  betaSim <- numeric(nStates + 1)
-  for (j in 1:(nStates+1)){
-    betaSim[j] = length(which(TSim[[j]] > TObs[[j]]))/ M
-  }
-  nTest <- length(dfTestList)
-  betas <- matrix(nrow=nTest, ncol=nStates+1)
-  for (i in 1:nTest){
-    dfTest <- dfTestList[[i]]
-
-    zObs <- lib$dataConsistencyModelValidation$logLikelihoodStatesTraj(dfTest, fittedMod, transitionMatrix, normalParams)
-    TObs <- list()
-    for(j in 1:(nStates+1)){
-      TObs[[j]] <- mean((zObs[,j] - Ez[[j]])^2/Vz[[j]])
-    }
-    for (j in 1:(nStates+1)){
-      betas[i, j] = length(which(TSim[[j]] > TObs[[j]]))/ M
-    }
-  }
-
-  zObs <- lib$dataConsistencyModelValidation$logLikelihoodStatesTraj(dataFrame, fittedMod, transitionMatrix, normalParams)
+  zObs <- lib$dataConsistencyModelValidation$logLikelihoodStatesTraj(dfTest, fittedMod, transitionMatrix, normalParams)
   TObs <- list()
   for(j in 1:(nStates+1)){
     TObs[[j]] <- mean((zObs[,j] - Ez[[j]])^2/Vz[[j]])
   }
-  betaModelTrain <- numeric(nStates + 1)
+  betaModel <- numeric(nStates + 1)
   for (j in 1:(nStates+1)){
-    betaModelTrain[j] = length(which(TSim[[j]] > TObs[[j]]))/ M
+    betaModel[j] = length(which(TSim[[j]] > TObs[[j]]))/ M
   }
-  return(list(betas, betaModelTrain, betaSim))
+  filename <- paste(outputDir, "PFAuTable", index, ".txt", sep = "")
+  write.table(betaModel, file=filename, row.names=FALSE, col.names=FALSE, eol=" & ")
+
+  return(betaModel)
 }
 
-dataFrame1 <- read.csv("input/videoStateTimesTestMS3_other.csv")
-dataFrame1 <- lib$importData$AdaptDataFrame(dataFrame1, 1, TRUE)
+dataFrame <- read.csv("input/videoStateTimesTestMS3.csv")
+dataFrame <- lib$importData$AdaptDataFrame(dataFrame, 1, TRUE)
 
-dataFrame2 <- read.csv("input/videoStateTimesTestMS3.csv")
-dataFrame2 <- lib$importData$AdaptDataFrame(dataFrame2, 1, TRUE)
-
-
-indices <- seq(1, 5)
+indices <- list(1)
 nPartitions <- 4
-maxNStates <- 25
+maxNStates <-24
 MP <- 100
 M <- 100
 nTest <- 1
-outputDir1 <- "output/videoDecompressionMS3_other/"
-outputDir2 <- "output/videoDecompressionMS3/"
+outputDir <- "output/videoDecompressionMS3/"
 
-set.seed(13)
-pfauList = lapply(indices, try(EstimateValidateModel), dataFrame1, list(dataFrame2), outputDir1, maxNStates, nPartitions)
-
-pfauList = lapply(indices, try(EstimateValidateModel), dataFrame2, list(dataFrame1), outputDir2, maxNStates, nPartitions)
-print(pfauList[[1]][[2]])
-
+set.seed(3)
+pfauList = lapply(indices, try(EstimateValidateModel), dataFrame, dataFrame, outputDir, maxNStates, nPartitions)
+print(pfauList)
 
