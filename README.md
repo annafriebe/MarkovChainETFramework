@@ -2,8 +2,6 @@
 
 Framework for identification and validation of Markov Models with Gaussian Emission Distributions from Execution Time sequences.
 
-NOTE: An errata with corrections of values in two tables of the submitted manuscript is provided in Errata.pdf.
-
 The modelIdentificationValidation directory contains R code for 
 - finding the number of states in the Markov Model using a tree-based cross-validation approach, methods in modelIdentificationValidation/R/evalLikelihood.R
 - evaluating a data consistency criterion for the model compared to observations, using methods in modelidendificationValidation/R/dataConsistencyModelValidation.R
