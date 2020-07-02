@@ -78,6 +78,7 @@ Fig 4 a can be found in
 
 modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel1.png
 modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel1.eps
+
 Fig 4 b can be found in 
 
 modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel9.png
