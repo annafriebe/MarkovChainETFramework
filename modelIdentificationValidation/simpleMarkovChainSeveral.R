@@ -109,6 +109,9 @@ EstimateValidateModel <- function(index, dataFrame, dfTestList, outputDir, maxNS
   for (j in 1:(nStates+1)){
     betaModelTrain[j] = length(which(TSim[[j]] > TObs[[j]]))/ M
   }
+  filename <- paste(outputDir, "PFAuTable", index, ".txt", sep = "")
+  write.table(betas, file=filename, row.names=FALSE, col.names=FALSE, sep=" & ")
+  
   return(list(betas, betaModelTrain, betaSim))
 }
 

@@ -16,7 +16,67 @@ The exportTimingData folder contains python scripts for converting the report fi
 
 The files in the modelIdentificationValidation/input folder are pregenerated, so the tests in modelIdentificationValidation can be run directly, without the steps of generating the reports from the trace files and generating the .csv files from the reports.
 
-Tests have been made on RStudio with 
+The simple markov chain experiment can be run with
+modelIdentificationValidation/simpleMarkovChainSeveral.R
+
+The results in table 1 can be found in 
+modelIdentificationValidation/output/simpleMarkovTest/normalParams1
+modelIdentificationValidation/output/simpleMarkovTest/PFAuTable1
+
+The transition matrix in Eq. 10 can be found in 
+modelIdentificationValidation/output/simpleMarkovTest/transitionMatrix1
+
+The different experiments for each macro state of the video decompression test can be run with
+modelIdentificationValidation/videoDecompressionTestMS1.R
+modelIdentificationValidation/videoDecompressionTestMS2.R
+modelIdentificationValidation/videoDecompressionTestMS3.R
+modelIdentificationValidation/videoDecompressionTestMS4.R
+
+The results in table 2 can be found in
+modelIdentificationValidation/output/videoDecompressionMS1/normalParams1
+modelIdentificationValidation/output/videoDecompressionMS1/PFAuTable1
+
+The results in table 3 can be found in
+modelIdentificationValidation/output/videoDecompressionMS2/normalParams1
+modelIdentificationValidation/output/videoDecompressionMS2/PFAuTable1
+
+The results in table 4 can be found in
+modelIdentificationValidation/output/videoDecompressionMS3/normalParams1
+modelIdentificationValidation/output/videoDecompressionMS3/PFAuTable1
+
+The results in table 5 can be found in
+modelIdentificationValidation/output/videoDecompressionMS4/normalParams1
+modelIdentificationValidation/output/videoDecompressionMS4/PFAuTable1
+
+For running the entire chain from the trace files:
+1. generate the report files (on a linux system with trace-cmd)
+simpleMarkov/simpleMarkovTraceReports.sh
+videoDecompression/videoDecompressionTraceReports.sh
+2. extract execution time data from the report files
+exportTimingData/exportDataToCSVSimpleMarkov.py
+exportTimingData/exportDataToCSVVideoDecompression.py
+3. Run the experiments as described above
+
+After running the experiments, figures can be generated with 
+- modelIdentificationValidation/visualizeMarkov.R
+Fig. 1 can be found in 
+modelIdentificationValidation/output/simpleMarkovChainSeq.png
+modelIdentificationValidation/output/simpleMarkovChainSeq.eps
+
+- modelIdentificationValidation/generateGeneralMidFigures.R
+Fig. 2 can be found in 
+modelIdentificationValidation/output/VideoExecutionTimeTestSeqLog.png
+modelIdentificationValidation/output/VideoExecutionTimeTestSeqLog.eps
+
+- modelIdentificationValidation/generateMarkovChainModelFigures.R
+Fig 4 a can be found in 
+modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel1.png
+modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel1.eps
+Fig 4 b can be found in 
+modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel9.png
+modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel9.eps
+
+Tests have been made on RStudio version 1.1.456 with 
 - R version 3.6.1
 - depmixS4 version 1.4.0
 - data.tree version 0.7.11
