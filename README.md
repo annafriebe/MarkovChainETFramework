@@ -17,9 +17,11 @@ The exportTimingData folder contains python scripts for converting the report fi
 The files in the modelIdentificationValidation/input folder are pregenerated, so the tests in modelIdentificationValidation can be run directly, without the steps of generating the reports from the trace files and generating the .csv files from the reports.
 
 The simple markov chain experiment can be run with
+
 modelIdentificationValidation/simpleMarkovChainSeveral.R
 
 The results in table 1 can be found in 
+
 modelIdentificationValidation/output/simpleMarkovTest/normalParams1
 modelIdentificationValidation/output/simpleMarkovTest/PFAuTable1
 
@@ -33,18 +35,22 @@ modelIdentificationValidation/videoDecompressionTestMS3.R
 modelIdentificationValidation/videoDecompressionTestMS4.R
 
 The results in table 2 can be found in
+
 modelIdentificationValidation/output/videoDecompressionMS1/normalParams1
 modelIdentificationValidation/output/videoDecompressionMS1/PFAuTable1
 
 The results in table 3 can be found in
+
 modelIdentificationValidation/output/videoDecompressionMS2/normalParams1
 modelIdentificationValidation/output/videoDecompressionMS2/PFAuTable1
 
 The results in table 4 can be found in
+
 modelIdentificationValidation/output/videoDecompressionMS3/normalParams1
 modelIdentificationValidation/output/videoDecompressionMS3/PFAuTable1
 
 The results in table 5 can be found in
+
 modelIdentificationValidation/output/videoDecompressionMS4/normalParams1
 modelIdentificationValidation/output/videoDecompressionMS4/PFAuTable1
 
