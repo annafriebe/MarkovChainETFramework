@@ -60,22 +60,26 @@ exportTimingData/exportDataToCSVVideoDecompression.py
 After running the experiments, figures can be generated with 
 - modelIdentificationValidation/visualizeMarkov.R
 
-Fig. 1 can be found in 
+Fig. 1 can be found in
+ 
 modelIdentificationValidation/output/simpleMarkovChainSeq.png
 modelIdentificationValidation/output/simpleMarkovChainSeq.eps
 
 - modelIdentificationValidation/generateGeneralMidFigures.R
 
 Fig. 2 can be found in 
+
 modelIdentificationValidation/output/VideoExecutionTimeTestSeqLog.png
 modelIdentificationValidation/output/VideoExecutionTimeTestSeqLog.eps
 
 - modelIdentificationValidation/generateMarkovChainModelFigures.R
 
 Fig 4 a can be found in 
+
 modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel1.png
 modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel1.eps
 Fig 4 b can be found in 
+
 modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel9.png
 modelIdentificationValidation/output/simpleMarkovTest/simpleMarkovModel9.eps
 
