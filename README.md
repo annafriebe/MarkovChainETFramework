@@ -29,9 +29,13 @@ The transition matrix in Eq. 10 can be found in
 modelIdentificationValidation/output/simpleMarkovTest/transitionMatrix1
 
 The different experiments for each macro state of the video decompression test can be run with
+
 modelIdentificationValidation/videoDecompressionTestMS1.R
+
 modelIdentificationValidation/videoDecompressionTestMS2.R
+
 modelIdentificationValidation/videoDecompressionTestMS3.R
+
 modelIdentificationValidation/videoDecompressionTestMS4.R
 
 The results in table 2 can be found in
